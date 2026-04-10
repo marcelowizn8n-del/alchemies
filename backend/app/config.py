@@ -8,6 +8,13 @@ class Settings(BaseSettings):
     env: str = "development"
     app_name: str = "Alchemies API"
     public_base_url: str = Field(default="http://127.0.0.1:8000")
+    cors_allow_origins: str = Field(default="*")
+
+    @property
+    def cors_origins(self) -> list[str]:
+        if self.cors_allow_origins.strip() == "*":
+            return ["*"]
+        return [origin.strip() for origin in self.cors_allow_origins.split(",") if origin.strip()]
 
 
 settings = Settings()

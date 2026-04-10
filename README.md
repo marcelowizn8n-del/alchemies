@@ -35,3 +35,28 @@ REMOTE_USER=root REMOTE_HOST=72.62.12.98 ./deploy/publish.sh
 ```
 
 Server setup and Nginx config details are documented in `DEPLOY_VPS.md`.
+
+## Run the API locally
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Then open `studio.html` through a local static server and the studio will dispatch jobs to the API.
+
+Example:
+
+```bash
+cd /Users/marcelo/Documents/alchemies.pro
+python3 -m http.server 4173
+```
+
+Then visit:
+
+```text
+http://127.0.0.1:4173/studio.html
+```

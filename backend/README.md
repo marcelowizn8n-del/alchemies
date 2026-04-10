@@ -48,11 +48,29 @@ cd backend
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+If you do not have dependencies installed yet:
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+## Studio integration
+
+The frontend studio is now prepared to call this API directly.
+
+- local static studio pages default to `http://127.0.0.1:8000`
+- deployed pages expect a future reverse proxy path such as `/api`
+- jobs are created through the API and then polled until completion
+
 ## Next implementation steps
 
 1. add PostgreSQL models
 2. add Redis-backed queueing
 3. add object storage integration
 4. add auth tokens
-5. connect the frontend studio to this API
+5. add authenticated uploads for reference assets
 6. replace mock completion with real GPU workers

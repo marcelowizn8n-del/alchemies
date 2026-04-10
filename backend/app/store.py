@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from .schemas import (
+    ArtifactRecord,
     GenerationAcceptedResponse,
     GenerationKind,
     GenerationRecord,
@@ -87,10 +88,21 @@ class MemoryStore:
         return GenerationAcceptedResponse(generation=generation, job=job)
 
     def get_job(self, job_id: str) -> JobRecord | None:
-        return self.jobs.get(job_id)
+        job = self.jobs.get(job_id)
+        if not job:
+            return None
+        self._sync_job(job)
+        return job
 
     def get_generation(self, generation_id: str) -> GenerationRecord | None:
-        return self.generations.get(generation_id)
+        generation = self.generations.get(generation_id)
+        if not generation:
+            return None
+
+        job = next((item for item in self.jobs.values() if item.generation_id == generation_id), None)
+        if job:
+            self._sync_job(job)
+        return generation
 
     def mock_complete(self, job_id: str) -> JobRecord | None:
         job = self.jobs.get(job_id)
@@ -106,11 +118,61 @@ class MemoryStore:
         job.updated_at = now
 
         generation.status = JobStatus.succeeded
-        generation.output_urls = [
-            f"/mock-output/{generation.id}.{ 'mp4' if generation.kind == GenerationKind.video else 'png' }"
-        ]
+        generation.artifacts = self._build_artifacts(generation)
+        generation.output_urls = [artifact.download_url for artifact in generation.artifacts if artifact.download_url]
         generation.updated_at = now
         return job
+
+    def _sync_job(self, job: JobRecord) -> None:
+        if job.status in {JobStatus.succeeded, JobStatus.failed}:
+            return
+
+        generation = self.generations[job.generation_id]
+        now = utcnow()
+        elapsed = (now - job.created_at).total_seconds()
+        target_seconds = 5.0 if job.kind == GenerationKind.image else 7.5
+
+        if elapsed < 1.2:
+            job.status = JobStatus.queued
+            job.progress = max(6, min(18, int(elapsed * 10)))
+            job.message = "queued for orchestration dispatch"
+            generation.status = JobStatus.queued
+        elif elapsed < target_seconds:
+            progress_ratio = (elapsed - 1.2) / (target_seconds - 1.2)
+            job.status = JobStatus.processing
+            job.progress = max(20, min(96, 20 + int(progress_ratio * 72)))
+            job.message = self._processing_message(generation)
+            generation.status = JobStatus.processing
+        else:
+            job.status = JobStatus.succeeded
+            job.progress = 100
+            job.message = "mock worker completed successfully"
+            generation.status = JobStatus.succeeded
+            generation.artifacts = self._build_artifacts(generation)
+            generation.output_urls = [artifact.download_url for artifact in generation.artifacts if artifact.download_url]
+
+        job.updated_at = now
+        generation.updated_at = now
+
+    def _processing_message(self, generation: GenerationRecord) -> str:
+        if generation.kind == GenerationKind.image:
+            if generation.request.get("reference_assets"):
+                return "conditioning reference-guided image job"
+            return "running text-to-image diffusion pass"
+        return "assembling temporal video frames"
+
+    def _build_artifacts(self, generation: GenerationRecord) -> list[ArtifactRecord]:
+        extension = "png" if generation.kind == GenerationKind.image else "mp4"
+        primary = ArtifactRecord(
+            filename=f"{generation.id}.{extension}",
+            media_type="image/png" if generation.kind == GenerationKind.image else "video/mp4",
+        )
+        metadata = ArtifactRecord(
+            filename=f"{generation.id}.json",
+            media_type="application/json",
+            download_url=f"{generation.id}.json",
+        )
+        return [primary, metadata]
 
 
 store = MemoryStore()

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .api import router as api_router
 from .config import settings
@@ -12,10 +13,24 @@ app = FastAPI(
     ),
 )
 
+allow_origins = settings.cors_origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allow_origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/healthz")
 def healthz():
-    return {"status": "ok", "service": settings.app_name, "env": settings.env}
+    return {
+        "status": "ok",
+        "service": settings.app_name,
+        "env": settings.env,
+        "cors_allow_origins": allow_origins,
+    }
 
 
 @app.get("/")

@@ -8,6 +8,7 @@
       name="description"
       content="Interactive studio demo for Alchemies.PRO, including generation controls, history, and export modal states."
     />
+    <meta name="alchemies-api-base-url" content="/api" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -52,6 +53,7 @@
           <span class="wordmark">Ethereal Canvas</span>
         </div>
         <div class="studio-top-actions">
+          <span class="api-badge api-badge-pending" data-api-status>API status: checking</span>
           <a class="button button-secondary button-compact" href="blueprint.html">Blueprint</a>
           <span class="status-pill">Pro Mode</span>
         </div>
@@ -116,8 +118,13 @@
           </div>
 
           <button class="button button-primary button-block studio-generate" data-generate type="button">
-            Generate Artifact
+            <span data-generate-label>Generate Artifact</span>
           </button>
+
+          <section class="job-status-card" data-job-feedback>
+            <strong>Own API not connected yet</strong>
+            <span>Start the backend service and this studio will create and monitor generation jobs through it.</span>
+          </section>
         </section>
 
         <section class="preview-stage">
@@ -134,12 +141,17 @@
                 <div class="artifact-ribbon ribbon-c"></div>
               </div>
             </div>
+
+            <div class="preview-caption">
+              <strong data-preview-title>Awaiting first API job</strong>
+              <p data-preview-message>When you submit a generation, this preview will track your own orchestration layer instead of a frontend-only mock.</p>
+            </div>
           </article>
 
           <section class="history-panel">
             <div class="history-head">
               <span class="field-label">Recent History</span>
-              <button class="link-button" data-show-progress type="button">Export Assets</button>
+              <button class="link-button" data-show-progress type="button">Dispatch Test Job</button>
             </div>
 
             <div class="history-strip" data-history-strip>
@@ -160,8 +172,8 @@
     <section class="modal glass-panel" data-modal="progress" hidden>
       <header class="modal-head">
         <div>
-          <h2>Downloading Assets</h2>
-          <p>Syncing high-fidelity neural renders to local storage.</p>
+          <h2 data-progress-title>Dispatching Job</h2>
+          <p data-progress-subtitle>Sending the generation request to your own API.</p>
         </div>
         <strong data-progress-value>65%</strong>
       </header>
@@ -173,24 +185,24 @@
       <div class="download-list">
         <article class="download-item is-complete">
           <div>
-            <strong>Ethereal_Abstract_01.png</strong>
-            <span>Completed • 4.2 MB</span>
+            <strong data-progress-primary-name>Job created</strong>
+            <span data-progress-primary-detail>Waiting for worker dispatch</span>
           </div>
-          <em>Done</em>
+          <em data-progress-primary-state>Queued</em>
         </article>
         <article class="download-item is-active">
           <div>
-            <strong>Cyber_Portrait_02.mp4</strong>
-            <span>Rendering export bundle</span>
+            <strong data-progress-secondary-name>Generation mode</strong>
+            <span data-progress-secondary-detail>Image</span>
           </div>
-          <em>45%</em>
+          <em data-progress-secondary-state>Pending</em>
         </article>
         <article class="download-item">
           <div>
-            <strong>Metadata_Manifest.json</strong>
-            <span>Waiting in queue</span>
+            <strong data-progress-tertiary-name>Request profile</strong>
+            <span data-progress-tertiary-detail>Prompt package prepared</span>
           </div>
-          <em>Queued</em>
+          <em data-progress-tertiary-state>Ready</em>
         </article>
       </div>
 
@@ -202,31 +214,31 @@
     <section class="modal glass-panel modal-success" data-modal="success" hidden>
       <div class="success-icon">✓</div>
       <h2>Success</h2>
-      <p>Your assets have been successfully exported.</p>
+      <p data-success-message>Your own API accepted the job and produced generation artifacts.</p>
 
       <div class="download-list">
         <article class="download-item is-complete">
           <div>
-            <strong>Ethereal_Abstract_01.zip</strong>
-            <span>Bundle ready</span>
+            <strong data-success-primary-name>generation.png</strong>
+            <span data-success-primary-detail>Primary artifact record created</span>
           </div>
-          <em>Ready</em>
+          <em data-success-primary-state>Mock</em>
         </article>
         <article class="download-item is-complete">
           <div>
-            <strong>Project_Assets_Bundle.zip</strong>
-            <span>Bundle ready</span>
+            <strong data-success-secondary-name>generation.json</strong>
+            <span data-success-secondary-detail>Metadata artifact record created</span>
           </div>
-          <em>Ready</em>
+          <em data-success-secondary-state>Mock</em>
         </article>
       </div>
 
       <div class="modal-actions modal-actions-split">
         <button class="button button-secondary" data-close-modals type="button">Close</button>
-        <a class="button button-primary" href="Multimodal_AI_Blueprint.pdf">Open Folder</a>
+        <a class="button button-primary" data-open-generation href="#" target="_blank" rel="noreferrer">Open Generation</a>
       </div>
 
-      <small>Transaction ID: ETH-9842-SUCCESS</small>
+      <small data-success-transaction>Generation ID pending</small>
     </section>
 
     <script src="assets/app.js"></script>

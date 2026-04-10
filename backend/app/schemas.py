@@ -33,6 +33,12 @@ class ReferenceAsset(BaseModel):
     uri: str
 
 
+class ArtifactRecord(BaseModel):
+    filename: str
+    media_type: str
+    download_url: str | None = None
+
+
 class ImageGenerationRequest(BaseModel):
     prompt: str
     negative_prompt: str | None = None
@@ -62,6 +68,7 @@ class GenerationRecord(BaseModel):
     status: JobStatus
     model: str
     prompt: str
+    artifacts: list[ArtifactRecord] = Field(default_factory=list)
     output_urls: list[str] = Field(default_factory=list)
     request: dict[str, Any]
     created_at: datetime = Field(default_factory=utcnow)
