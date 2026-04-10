@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
@@ -36,12 +36,12 @@ class ReferenceAsset(BaseModel):
 class ArtifactRecord(BaseModel):
     filename: str
     media_type: str
-    download_url: str | None = None
+    download_url: Optional[str] = None
 
 
 class ImageGenerationRequest(BaseModel):
     prompt: str
-    negative_prompt: str | None = None
+    negative_prompt: Optional[str] = None
     model: str = Field(default="sd3.5-large")
     width: int = Field(default=1024, ge=256, le=2048)
     height: int = Field(default=1024, ge=256, le=2048)
@@ -53,7 +53,7 @@ class ImageGenerationRequest(BaseModel):
 
 class VideoGenerationRequest(BaseModel):
     prompt: str
-    negative_prompt: str | None = None
+    negative_prompt: Optional[str] = None
     model: str = Field(default="wan2.1-t2v-1.3b")
     duration_seconds: int = Field(default=5, ge=1, le=12)
     aspect_ratio: str = Field(default="16:9")

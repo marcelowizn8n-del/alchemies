@@ -3,7 +3,7 @@ name = "alchemies-api"
 version = "0.1.0"
 description = "Own API foundation for Alchemies.PRO image and video generation."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 dependencies = [
   "fastapi>=0.115.0,<1.0.0",
   "pydantic>=2.8.0,<3.0.0",

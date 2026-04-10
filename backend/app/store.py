@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Optional
 
 from .schemas import (
     ArtifactRecord,
@@ -87,14 +87,14 @@ class MemoryStore:
         self.jobs[job.id] = job
         return GenerationAcceptedResponse(generation=generation, job=job)
 
-    def get_job(self, job_id: str) -> JobRecord | None:
+    def get_job(self, job_id: str) -> Optional[JobRecord]:
         job = self.jobs.get(job_id)
         if not job:
             return None
         self._sync_job(job)
         return job
 
-    def get_generation(self, generation_id: str) -> GenerationRecord | None:
+    def get_generation(self, generation_id: str) -> Optional[GenerationRecord]:
         generation = self.generations.get(generation_id)
         if not generation:
             return None
@@ -104,7 +104,7 @@ class MemoryStore:
             self._sync_job(job)
         return generation
 
-    def mock_complete(self, job_id: str) -> JobRecord | None:
+    def mock_complete(self, job_id: str) -> Optional[JobRecord]:
         job = self.jobs.get(job_id)
         if not job:
             return None
