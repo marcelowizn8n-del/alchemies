@@ -43,7 +43,7 @@ cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+uvicorn app.main:app --app-dir . --reload --host 127.0.0.1 --port 8010
 ```
 
 Then open `studio.html` through a local static server and the studio will dispatch jobs to the API.

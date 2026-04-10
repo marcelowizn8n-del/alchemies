@@ -45,7 +45,7 @@ It does **not** perform real generation yet.
 
 ```bash
 cd backend
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+uvicorn app.main:app --app-dir . --reload --host 127.0.0.1 --port 8010
 ```
 
 If you do not have dependencies installed yet:
@@ -55,14 +55,14 @@ cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+uvicorn app.main:app --app-dir . --reload --host 127.0.0.1 --port 8010
 ```
 
 ## Studio integration
 
 The frontend studio is now prepared to call this API directly.
 
-- local static studio pages default to `http://127.0.0.1:8000`
+- local static studio pages default to `http://127.0.0.1:8010`
 - deployed pages expect a future reverse proxy path such as `/api`
 - jobs are created through the API and then polled until completion
 

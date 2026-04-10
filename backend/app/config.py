@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
     env: str = "development"
     app_name: str = "Alchemies API"
-    public_base_url: str = Field(default="http://127.0.0.1:8000")
+    public_base_url: str = Field(default="http://127.0.0.1:8010")
     cors_allow_origins: str = Field(default="*")
 
     @property
