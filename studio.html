@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alchemies.PRO | Studio</title>
+    <meta
+      name="description"
+      content="Interactive studio demo for Alchemies.PRO, including generation controls, history, and export modal states."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body class="page-shell page-studio">
+    <div class="ambient ambient-violet"></div>
+    <div class="ambient ambient-cyan"></div>
+    <div class="noise"></div>
+
+    <aside class="sidebar panel">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">A</span>
+        <span class="brand-copy">
+          <strong>Digital Alchemist</strong>
+          <small>Creator Pro</small>
+        </span>
+      </a>
+
+      <a class="button button-primary button-block sidebar-create" href="studio.html">Create New</a>
+
+      <nav class="sidebar-nav">
+        <a class="is-active" href="studio.html">Home</a>
+        <a href="blueprint.html">Blueprint</a>
+        <a href="Multimodal_AI_Blueprint.pdf">Library</a>
+        <a href="index.html">Portal</a>
+      </nav>
+
+      <div class="storage-card">
+        <span class="eyebrow">Storage Usage</span>
+        <div class="storage-bar"><span></span></div>
+        <small>7.2 GB of 10 GB used</small>
+      </div>
+    </aside>
+
+    <div class="studio-shell">
+      <header class="studio-topbar">
+        <div>
+          <span class="wordmark">Ethereal Canvas</span>
+        </div>
+        <div class="studio-top-actions">
+          <a class="button button-secondary button-compact" href="blueprint.html">Blueprint</a>
+          <span class="status-pill">Pro Mode</span>
+        </div>
+      </header>
+
+      <main class="studio-main">
+        <section class="control-panel panel">
+          <div class="field-group">
+            <label class="field-label">Generation Mode</label>
+            <div class="segmented-control" data-segmented>
+              <button class="is-active" data-value="image" type="button">Image</button>
+              <button data-value="video" type="button">Video</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="positivePrompt">Positive Prompt</label>
+            <textarea
+              id="positivePrompt"
+              rows="4"
+            >A cinematic portrait of a cybernetic deity surrounded by liquid obsidian and neon silk.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="negativePrompt">Negative Prompt</label>
+            <textarea id="negativePrompt" rows="3">Blurry, low resolution, distorted anatomy, muddy lighting.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Structure Reference</label>
+            <label class="upload-card" for="structureRef">
+              <input id="structureRef" type="file" hidden />
+              <strong data-upload-label>Drop image to guide composition</strong>
+              <span>Depth, pose, or sketch reference</span>
+            </label>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Aspect Ratio</label>
+            <div class="ratio-grid" data-ratios>
+              <button class="is-active" data-ratio="1:1" type="button">1:1</button>
+              <button data-ratio="16:9" type="button">16:9</button>
+              <button data-ratio="9:16" type="button">9:16</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="qualityPreset">Quality Preset</label>
+            <select id="qualityPreset">
+              <option>Hyper-Realistic (4K)</option>
+              <option>Studio Cinematic</option>
+              <option>Fast Preview</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="durationRange">
+              Video Duration
+              <span data-duration-readout>5s</span>
+            </label>
+            <input id="durationRange" type="range" min="3" max="10" value="5" />
+          </div>
+
+          <button class="button button-primary button-block studio-generate" data-generate type="button">
+            Generate Artifact
+          </button>
+        </section>
+
+        <section class="preview-stage">
+          <article class="preview-card panel">
+            <div class="preview-head">
+              <span class="status-dot"></span>
+              <span data-model-readout>Stable Diffusion XL • 45 Steps</span>
+            </div>
+
+            <div class="artifact-shell artifact-square" data-artifact-shell>
+              <div class="artifact-core">
+                <div class="artifact-ribbon ribbon-a"></div>
+                <div class="artifact-ribbon ribbon-b"></div>
+                <div class="artifact-ribbon ribbon-c"></div>
+              </div>
+            </div>
+          </article>
+
+          <section class="history-panel">
+            <div class="history-head">
+              <span class="field-label">Recent History</span>
+              <button class="link-button" data-show-progress type="button">Export Assets</button>
+            </div>
+
+            <div class="history-strip" data-history-strip>
+              <button class="history-thumb"></button>
+              <button class="history-thumb"></button>
+              <button class="history-thumb is-active"></button>
+              <button class="history-thumb history-add">+</button>
+              <button class="history-thumb is-muted"></button>
+              <button class="history-thumb is-muted"></button>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" data-modal-backdrop hidden></div>
+
+    <section class="modal glass-panel" data-modal="progress" hidden>
+      <header class="modal-head">
+        <div>
+          <h2>Downloading Assets</h2>
+          <p>Syncing high-fidelity neural renders to local storage.</p>
+        </div>
+        <strong data-progress-value>65%</strong>
+      </header>
+
+      <div class="modal-progress">
+        <span data-progress-bar></span>
+      </div>
+
+      <div class="download-list">
+        <article class="download-item is-complete">
+          <div>
+            <strong>Ethereal_Abstract_01.png</strong>
+            <span>Completed • 4.2 MB</span>
+          </div>
+          <em>Done</em>
+        </article>
+        <article class="download-item is-active">
+          <div>
+            <strong>Cyber_Portrait_02.mp4</strong>
+            <span>Rendering export bundle</span>
+          </div>
+          <em>45%</em>
+        </article>
+        <article class="download-item">
+          <div>
+            <strong>Metadata_Manifest.json</strong>
+            <span>Waiting in queue</span>
+          </div>
+          <em>Queued</em>
+        </article>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary button-block" data-close-modals type="button">Cancel</button>
+      </div>
+    </section>
+
+    <section class="modal glass-panel modal-success" data-modal="success" hidden>
+      <div class="success-icon">✓</div>
+      <h2>Success</h2>
+      <p>Your assets have been successfully exported.</p>
+
+      <div class="download-list">
+        <article class="download-item is-complete">
+          <div>
+            <strong>Ethereal_Abstract_01.zip</strong>
+            <span>Bundle ready</span>
+          </div>
+          <em>Ready</em>
+        </article>
+        <article class="download-item is-complete">
+          <div>
+            <strong>Project_Assets_Bundle.zip</strong>
+            <span>Bundle ready</span>
+          </div>
+          <em>Ready</em>
+        </article>
+      </div>
+
+      <div class="modal-actions modal-actions-split">
+        <button class="button button-secondary" data-close-modals type="button">Close</button>
+        <a class="button button-primary" href="Multimodal_AI_Blueprint.pdf">Open Folder</a>
+      </div>
+
+      <small>Transaction ID: ETH-9842-SUCCESS</small>
+    </section>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>

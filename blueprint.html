@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alchemies.PRO | Blueprint</title>
+    <meta
+      name="description"
+      content="Technical blueprint for multimodal image and video generation pipelines, packaged for Alchemies.PRO."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body class="page-shell page-blueprint">
+    <div class="ambient ambient-violet"></div>
+    <div class="ambient ambient-cyan"></div>
+    <div class="noise"></div>
+
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">A</span>
+        <span class="brand-copy">
+          <strong>Alchemies.PRO</strong>
+          <small>Technical Blueprint</small>
+        </span>
+      </a>
+
+      <nav class="topnav">
+        <a href="index.html">Portal</a>
+        <a href="studio.html">Studio</a>
+        <a href="blueprint.html">Blueprint</a>
+      </nav>
+    </header>
+
+    <main class="blueprint-main">
+      <section class="blueprint-hero panel">
+        <div class="blueprint-hero-copy">
+          <span class="eyebrow">Multimodal Architecture</span>
+          <h1>Design the system around context, control, coherence, and hardware reality.</h1>
+          <p>
+            This page packages your technical guide into a polished web view, connecting product vision to
+            deployable system design for image and video generation.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="Multimodal_AI_Blueprint.pdf">Download PDF</a>
+            <a class="button button-secondary" href="studio.html">Open Studio Demo</a>
+          </div>
+        </div>
+
+        <div class="diagram-frame blueprint-diagram">
+          <img
+            src="assets/pipeline-media-generation.png"
+            alt="Pipeline de geração multimodal de imagem e vídeo"
+          />
+        </div>
+      </section>
+
+      <section class="card-grid">
+        <article class="panel blueprint-card">
+          <span class="eyebrow">1. Base Models</span>
+          <h3>Transformers dominate global context, but the implementation layer matters.</h3>
+          <p>
+            For modern video generation, a more current framing is diffusion with space-time modules, 3D
+            U-Nets, temporal attention, and increasingly Diffusion Transformers rather than classic CNN+RNN
+            pipelines alone.
+          </p>
+        </article>
+
+        <article class="panel blueprint-card">
+          <span class="eyebrow">2. Structural Control</span>
+          <h3>ControlNet is a conditioning path, not a replacement model.</h3>
+          <p>
+            Use structural priors such as depth, pose, sketches, or edges to anchor composition while the
+            diffusion model fills texture, material, and lighting. In practice, control strength and timing
+            matter as much as the conditioning image itself.
+          </p>
+        </article>
+
+        <article class="panel blueprint-card">
+          <span class="eyebrow">3. Temporal Coherence</span>
+          <h3>Video quality lives in cross-frame consistency, not only in single-frame beauty.</h3>
+          <p>
+            Attention mechanisms give the model longer-range access to motion and identity cues, helping with
+            character continuity, scene evolution, and more reliable long-form synthesis.
+          </p>
+        </article>
+
+        <article class="panel blueprint-card">
+          <span class="eyebrow">4. GPU Constraints</span>
+          <h3>Quantization reduces weight memory, but total VRAM depends on the whole pipeline.</h3>
+          <p>
+            `load_in_4bit` is useful, especially with FP16 or BF16 compute, but total savings depend on
+            activations, caches, VAE stages, attention states, and the surrounding runtime.
+          </p>
+        </article>
+      </section>
+
+      <section class="panel blueprint-links">
+        <div>
+          <span class="eyebrow">Artifacts</span>
+          <h3>Included project files</h3>
+        </div>
+        <div class="blueprint-actions">
+          <a class="button button-secondary" href="Multimodal_AI_Blueprint.pdf">Blueprint PDF</a>
+          <a class="button button-secondary" href="Gerador_de_IA_Multimodal.mp4">Demo Video</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Blueprint pages and deploy assets are bundled for `alchemies.pro`.</p>
+      <div>
+        <a href="index.html">Portal</a>
+        <a href="studio.html">Studio</a>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ethereal Canvas | Asset Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0e0e0e;
+            color: #ffffff;
+            margin: 0;
+            overflow: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(24, 24, 27, 0.3);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+        .liquid-light {
+            background: linear-gradient(135deg, #ba9eff 0%, #8455ef 100%);
+        }
+        .whisper-border {
+            outline: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#2b006e",
+                        "on-background": "#ffffff",
+                        "secondary-fixed-dim": "#d6d4d3",
+                        "surface-container": "#1a1919",
+                        "error-dim": "#d73357",
+                        "primary-dim": "#8455ef",
+                        "primary-fixed-dim": "#a27cff",
+                        "on-surface": "#ffffff",
+                        "surface-bright": "#2c2c2c",
+                        "error-container": "#a70138",
+                        "on-error": "#490013",
+                        "outline": "#777575",
+                        "background": "#0e0e0e",
+                        "surface": "#0e0e0e",
+                        "inverse-primary": "#6e3bd7",
+                        "primary-fixed": "#ae8dff",
+                        "primary": "#ba9eff",
+                        "on-tertiary-fixed": "#001a27",
+                        "on-surface-variant": "#adaaaa",
+                        "error": "#ff6e84",
+                        "secondary-dim": "#d6d4d3",
+                        "on-error-container": "#ffb2b9",
+                        "surface-dim": "#0e0e0e",
+                        "surface-container-lowest": "#000000",
+                        "surface-container-low": "#131313",
+                        "tertiary-fixed": "#37bcf7",
+                        "on-secondary-fixed": "#403f3f",
+                        "secondary-container": "#474746",
+                        "on-tertiary": "#003b52",
+                        "on-primary-fixed-variant": "#370086",
+                        "inverse-surface": "#fcf8f8",
+                        "surface-container-high": "#201f1f",
+                        "on-secondary": "#525151",
+                        "on-primary": "#39008c",
+                        "tertiary": "#47c4ff",
+                        "surface-tint": "#ba9eff",
+                        "outline-variant": "#494847",
+                        "tertiary-fixed-dim": "#1bafe9",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface-container-highest": "#262626",
+                        "on-tertiary-container": "#003044",
+                        "on-secondary-container": "#d2d0cf",
+                        "on-primary-fixed": "#000000",
+                        "tertiary-dim": "#05a9e3",
+                        "inverse-on-surface": "#565554",
+                        "surface-variant": "#262626",
+                        "primary-container": "#ae8dff",
+                        "on-tertiary-fixed-variant": "#003e56",
+                        "tertiary-container": "#2db7f2",
+                        "secondary": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#5c5b5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-[#0e0e0e]/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(57,0,140,0.05)] flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black tracking-tighter text-violet-400">Ethereal Canvas</span>
+<div class="hidden md:flex items-center gap-6 font-['Inter'] text-sm tracking-wide">
+<a class="text-gray-400 hover:text-gray-200 transition-colors duration-300" href="#">Models</a>
+<a class="text-violet-400 border-b-2 border-violet-500 pb-1" href="#">Generations</a>
+<a class="text-gray-400 hover:text-gray-200 transition-colors duration-300" href="#">Training</a>
+<a class="text-gray-400 hover:text-gray-200 transition-colors duration-300" href="#">Assets</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-gray-400 hover:bg-[#262626] rounded-xl transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-gray-400 hover:bg-[#262626] rounded-xl transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/20">
+<img alt="Digital Alchemist Profile" data-alt="Close-up portrait of a high-tech digital artist with subtle glowing cybernetic patterns on their skin in a dark studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzy-b55eABSTDKkU2hiam4c_WYP1h9ILXrDzGEx7p1rTOzl9lOOpflV2UwG2f-IOiFBdpO_M1fANwLXiRBBHz-6NI-8MGHAX-XZLLZRTTOceU7ebL32PlA_6EdLqlhOCVvjvFEzKIC2ulpfUfL3NqWMWURjJTKnT4nhneARxpUPtOCGxcuFz6rA3sroCcJHObQFXBm1Uq1bBc8P8d8DtCOYtUnUcN3G8lzm0BxvQbDF0PXnrYaFmQNWw4BzBKqeCctR7kGgydHdOk"/>
+</div>
+</div>
+</nav>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#131313] flex flex-col py-6 px-4 gap-8">
+<div class="flex flex-col gap-1 px-2">
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest text-violet-500">Studio Alpha</span>
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Pro Tier</span>
+</div>
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-3 py-3 px-4 rounded-xl text-cyan-400 bg-[#262626] border-l-2 border-cyan-400 transition-all">
+<span class="material-symbols-outlined">space_dashboard</span>
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest">Workspace</span>
+</button>
+<button class="flex items-center gap-3 py-3 px-4 rounded-xl text-gray-500 hover:text-violet-300 hover:bg-[#1a1a1a] transition-all group">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">auto_awesome_motion</span>
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest">Library</span>
+</button>
+<button class="flex items-center gap-3 py-3 px-4 rounded-xl text-gray-500 hover:text-violet-300 hover:bg-[#1a1a1a] transition-all group">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">science</span>
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest">Alchemist Lab</span>
+</button>
+<button class="flex items-center gap-3 py-3 px-4 rounded-xl text-gray-500 hover:text-violet-300 hover:bg-[#1a1a1a] transition-all group">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">history</span>
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest">History</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-2 border-t border-outline-variant/10 pt-4">
+<button class="flex items-center gap-3 py-3 px-4 rounded-xl text-gray-500 hover:text-violet-300 transition-all">
+<span class="material-symbols-outlined">help</span>
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest">Help</span>
+</button>
+<button class="flex items-center gap-3 py-3 px-4 rounded-xl text-gray-500 hover:text-violet-300 transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-['Inter'] text-xs font-medium uppercase tracking-widest">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas (Background) -->
+<main class="ml-64 mt-16 p-8 min-h-screen bg-surface">
+<div class="flex flex-col gap-12 max-w-7xl mx-auto">
+<header>
+<h1 class="text-5xl font-black tracking-tighter mb-2">Generation Hub</h1>
+<p class="text-on-surface-variant max-w-xl leading-relaxed">Manage your synthetic assets and refine your neural outputs in the high-fidelity workspace.</p>
+</header>
+<!-- Bento Grid of Assets -->
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-8 bg-surface-container-low rounded-xl overflow-hidden h-[400px] relative whisper-border">
+<img class="w-full h-full object-cover opacity-60" data-alt="Abstract ethereal landscape with swirling violet and deep blue nebulae, glowing particles, and fluid light trails in high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxBipNhC0c7xFwGeoWgdFJ-y5UjWE6-MckVHWUhO6badPVSlKiekqZKAk0_CXNWTHCo6ZPJ7B4MwOE7IsDiiTxbkmnctV7UIaY9g6sK1q12AWrqwGoTPzH9pMQAEdsG-n5DHybvLSVlcYUaTSIp4DdUxdsG3HwSGQHi5eD0tXvqi5OOSp2ItMpbj5HmXN-3KqLlwvva4uSAq19qlbBfQam2wvj3JHr86Biv5CQ7Uv8T_5hoHHNksCnGY7FBCTm0dliMFdj-yKpT5E"/>
+<div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-surface to-transparent">
+<span class="label-sm text-tertiary font-label uppercase tracking-widest mb-2 block">Active Prompt</span>
+<h2 class="text-2xl font-bold tracking-tight">"Aqueous silk flowing through a vacuum of neon quartz"</h2>
+</div>
+</div>
+<div class="col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container-highest p-6 rounded-xl h-full whisper-border">
+<h3 class="label-sm text-on-surface-variant font-label uppercase tracking-widest mb-4">Neural Parameters</h3>
+<div class="space-y-4">
+<div class="h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="w-[75%] h-full bg-primary"></div>
+</div>
+<div class="h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="w-[40%] h-full bg-tertiary"></div>
+</div>
+<div class="h-1 bg-surface-container-low rounded-full overflow-hidden">
+<div class="w-[90%] h-full bg-primary-dim"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl h-full whisper-border flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant/30">add_circle</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Download Progress Modal Overlay -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-background/40 backdrop-blur-md">
+<div class="glass-panel w-full max-w-xl rounded-[2rem] p-8 whisper-border shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
+<!-- Decorative Glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 blur-[80px] rounded-full"></div>
+<div class="relative z-10">
+<header class="flex justify-between items-start mb-10">
+<div>
+<h2 class="text-3xl font-black tracking-tight mb-2">Downloading Assets</h2>
+<p class="text-on-surface-variant text-sm tracking-wide">Syncing high-fidelity neural renders to local storage...</p>
+</div>
+<div class="text-right">
+<span class="text-4xl font-black text-primary tracking-tighter">65%</span>
+</div>
+</header>
+<!-- Master Progress Bar -->
+<div class="mb-12">
+<div class="h-3 bg-surface-container-lowest rounded-full overflow-hidden whisper-border">
+<div class="h-full liquid-light w-[65%] shadow-[0_0_20px_rgba(186,158,255,0.4)]"></div>
+</div>
+</div>
+<!-- File List -->
+<div class="space-y-4 mb-10">
+<!-- Item 1: Finished -->
+<div class="flex items-center justify-between p-4 bg-surface-container-high/40 rounded-2xl group transition-all">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface">Ethereal_Abstract_01.png</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Completed • 4.2 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Item 2: Active -->
+<div class="flex items-center justify-between p-4 bg-surface-bright rounded-2xl border-l-2 border-tertiary transition-all">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">movie</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface">Cyber_Portrait_02.mp4</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-24 h-1 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="w-[45%] h-full bg-primary"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant">45%</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary animate-spin">progress_activity</span>
+</div>
+<!-- Item 3: Queued -->
+<div class="flex items-center justify-between p-4 bg-surface-container-high/40 rounded-2xl transition-all">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Metadata_Manifest.json</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Waiting in queue</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/30">schedule</span>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex justify-center pt-4 border-t border-outline-variant/10">
+<button class="px-8 py-3 bg-surface-container-highest text-on-surface text-sm font-bold tracking-widest uppercase rounded-full hover:bg-surface-bright transition-all active:scale-95">
+                        Cancel
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>
