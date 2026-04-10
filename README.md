@@ -8,6 +8,11 @@ Premium static frontend for a multimodal AI studio focused on image and video ge
 - `studio.html`: interactive studio demo with generation controls and modal states
 - `blueprint.html`: technical blueprint page tied to the PDF and diagram assets
 
+## Backend foundation
+
+- `backend/`: own API scaffold for future self-hosted image and video generation
+- `OWN_API_ARCHITECTURE.md`: product and infra direction for evolving into a commercial generation service
+
 ## Main assets
 
 - `assets/styles.css`: shared visual system and responsive layout
