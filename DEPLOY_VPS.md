@@ -1,10 +1,33 @@
 # Deploy Guide for `alchemies.pro`
 
-This project is now packaged as a static site that can be served directly by Nginx on your VPS at `72.62.12.98`.
+This project is packaged as a static site.
+
+There are two deployment modes in this repo:
+
+- `Safe Docker + Nginx Proxy Manager`: recommended for your current VPS, because ports `80` and `443` are already owned by `nginx-proxy-manager`
+- `Host Nginx`: only for clean servers where no other reverse proxy is already managing public traffic
+
+For your current VPS, use the safe Docker flow below and do **not** run `setup_vps.sh`.
+
+## Current VPS recommendation
+
+Your server already has:
+
+- `nginx-proxy-manager` on ports `80`, `81`, and `443`
+- `n8n` on `5678`
+- other running workloads
+
+So the safe path is:
+
+1. keep `nginx-proxy-manager` as the public reverse proxy
+2. run Alchemies in its own dedicated container
+3. bind Alchemies only to `127.0.0.1:8090`
+4. attach that container to the same Docker network used by `nginx-proxy-manager`
+5. create a new Proxy Host in NPM for `alchemies.pro`
 
 ## Recommended workflow
 
-Use the included scripts:
+Use the included scripts for the site bundle:
 
 1. Prepare the public bundle:
 
@@ -18,18 +41,10 @@ Use the included scripts:
 ./deploy/publish.sh
 ```
 
-3. On the VPS, install and configure Nginx:
+3. Deploy the isolated Docker service on the VPS using:
 
-```bash
-./deploy/setup_vps.sh
-```
-
-If you prefer running setup remotely without uploading the whole project first:
-
-```bash
-scp -r ./deploy root@72.62.12.98:/root/alchemies-deploy
-ssh root@72.62.12.98 'bash /root/alchemies-deploy/setup_vps.sh'
-```
+- `deploy/docker-compose.vps.yml`
+- `deploy/nginx/default.conf`
 
 ## Files to publish
 
@@ -56,7 +71,7 @@ Create these DNS records:
 Use a dedicated document root such as:
 
 ```bash
-/var/www/alchemies.pro/current
+/opt/alchemies/site
 ```
 
 ## Upload example
@@ -64,38 +79,43 @@ Use a dedicated document root such as:
 From your local machine:
 
 ```bash
-REMOTE_USER=root REMOTE_HOST=72.62.12.98 ./deploy/publish.sh
+REMOTE_USER=root REMOTE_HOST=72.62.12.98 REMOTE_PATH=/opt/alchemies/site ./deploy/publish.sh
 ```
 
-## Nginx setup
+## Safe Docker setup for your VPS
 
-1. Run [setup_vps.sh](/Users/marcelo/Documents/alchemies.pro/deploy/setup_vps.sh) as `root`, or copy [alchemies.pro.conf](/Users/marcelo/Documents/alchemies.pro/deploy/nginx/alchemies.pro.conf) to `/etc/nginx/sites-available/alchemies.pro`
-2. If doing it manually, create the symlink:
+Use:
 
 ```bash
-ln -s /etc/nginx/sites-available/alchemies.pro /etc/nginx/sites-enabled/alchemies.pro
+deploy/docker-compose.vps.yml
 ```
 
-3. Test and reload:
+And:
 
 ```bash
-nginx -t
-systemctl reload nginx
+deploy/nginx/default.conf
 ```
 
-## TLS with Certbot
+This keeps Alchemies isolated from the host Nginx and from the other containers.
 
-After DNS resolves to the VPS:
+## Nginx Proxy Manager
 
-```bash
-certbot --nginx -d alchemies.pro -d www.alchemies.pro
-```
+In NPM, create a new Proxy Host:
+
+- Domain Names: `alchemies.pro`, `www.alchemies.pro`
+- Scheme: `http`
+- Forward Hostname/IP: `alchemies-web`
+- Forward Port: `80`
+- Enable:
+  - `Block Common Exploits`
+  - `Websockets Support`
+- Then request an SSL certificate in NPM for both domains
 
 ## Recommended VPS packages
 
 ```bash
 apt update
-apt install -y nginx certbot python3-certbot-nginx
+apt install -y docker.io docker-compose-plugin rsync
 ```
 
 ## Notes
@@ -103,4 +123,5 @@ apt install -y nginx certbot python3-certbot-nginx
 - This is a static frontend build with no backend dependency.
 - File uploads in the studio are demo-level browser interactions only.
 - The public deployment bundle is generated in `/Users/marcelo/Documents/alchemies.pro/dist`.
-- If you later add an API, keep Nginx serving the static files and reverse proxy `/api` to the application service.
+- If you later add an API, keep it in a separate service and route it independently.
+- The host-Nginx files remain in the repo, but they are not the recommended path for this VPS.
