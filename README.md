@@ -43,7 +43,7 @@ cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
-uvicorn app.main:app --app-dir . --reload --host 127.0.0.1 --port 8010
+./run_local.sh
 ```
 
 Then open `studio.html` through a local static server and the studio will dispatch jobs to the API.
@@ -60,3 +60,5 @@ Then visit:
 ```text
 http://127.0.0.1:4173/studio.html
 ```
+
+In development mode, image jobs generate a placeholder PNG and video jobs generate a placeholder GIF through the API so the full end-to-end flow can be tested before a GPU worker is connected.

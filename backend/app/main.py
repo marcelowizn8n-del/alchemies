@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from .api import router as api_router
 from .config import settings
@@ -14,6 +15,8 @@ app = FastAPI(
 )
 
 allow_origins = settings.cors_origins
+settings.artifacts_path.mkdir(parents=True, exist_ok=True)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
@@ -21,6 +24,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.mount("/artifacts", StaticFiles(directory=settings.artifacts_path), name="artifacts")
 
 
 @app.get("/healthz")
@@ -30,6 +34,8 @@ def healthz():
         "service": settings.app_name,
         "env": settings.env,
         "cors_allow_origins": allow_origins,
+        "image_engine": settings.image_engine,
+        "video_engine": settings.video_engine,
     }
 
 

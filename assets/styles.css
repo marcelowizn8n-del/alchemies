@@ -797,6 +797,16 @@ main {
     linear-gradient(180deg, rgba(11, 12, 24, 0.95) 0%, rgba(18, 9, 22, 0.98) 100%);
 }
 
+.artifact-shell.has-asset {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.artifact-shell.has-asset .artifact-core {
+  opacity: 0.22;
+}
+
 .preview-caption {
   margin-top: 18px;
 }

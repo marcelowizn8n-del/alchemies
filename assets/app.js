@@ -26,6 +26,7 @@ const segmented = document.querySelector("[data-segmented]");
 const durationInput = document.querySelector("#durationRange");
 const durationReadout = document.querySelector("[data-duration-readout]");
 const modelReadout = document.querySelector("[data-model-readout]");
+const artifactShell = document.querySelector("[data-artifact-shell]");
 const apiMeta = document.querySelector('meta[name="alchemies-api-base-url"]');
 const apiStatus = document.querySelector("[data-api-status]");
 const generateButton = document.querySelector("[data-generate]");
@@ -113,6 +114,21 @@ function setPreviewCopy(title, detail) {
   if (previewMessage) previewMessage.textContent = detail;
 }
 
+function setPreviewAsset(artifact) {
+  if (!artifactShell) return;
+
+  if (!artifact?.download_url) {
+    artifactShell.classList.remove("has-asset");
+    artifactShell.style.backgroundImage = "";
+    return;
+  }
+
+  artifactShell.classList.add("has-asset");
+  artifactShell.style.backgroundImage = `linear-gradient(rgba(9, 9, 15, 0.18), rgba(9, 9, 15, 0.18)), url("${apiUrl(
+    artifact.download_url,
+  )}")`;
+}
+
 function setGenerateBusy(isBusy) {
   if (!generateButton) return;
   generateButton.disabled = isBusy;
@@ -182,7 +198,6 @@ if (durationInput && durationReadout) {
 const ratioGroup = document.querySelector("[data-ratios]");
 if (ratioGroup) {
   const buttons = Array.from(ratioGroup.querySelectorAll("button"));
-  const artifactShell = document.querySelector("[data-artifact-shell]");
   const defaultHeight = artifactShell ? window.getComputedStyle(artifactShell).minHeight : null;
 
   buttons.forEach((button) => {
@@ -312,9 +327,13 @@ function updateSuccessModal(generation) {
 
   if (successTransaction) successTransaction.textContent = `Generation ID: ${generation.id}`;
   if (openGenerationLink) {
-    openGenerationLink.href = apiUrl(`/v1/generations/${generation.id}`);
-    openGenerationLink.textContent = "Open Generation";
+    openGenerationLink.href = primaryArtifact?.download_url
+      ? apiUrl(primaryArtifact.download_url)
+      : apiUrl(`/v1/generations/${generation.id}`);
+    openGenerationLink.textContent = primaryArtifact?.download_url ? "Open Artifact" : "Open Generation";
   }
+
+  setPreviewAsset(primaryArtifact);
 }
 
 async function fetchJson(path, options = {}) {

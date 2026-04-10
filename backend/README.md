@@ -20,9 +20,10 @@ This scaffold provides:
 - a FastAPI app
 - image and video generation job endpoints
 - in-memory job and generation state for development
+- development placeholder artifact generation for image and video
 - a clean place to add queues, storage, billing, and GPU workers next
 
-It does **not** perform real generation yet.
+It still does **not** perform real AI generation yet. In local development it now creates real placeholder files so the end-to-end product flow can be tested honestly.
 
 ## Suggested architecture
 
@@ -65,6 +66,8 @@ The frontend studio is now prepared to call this API directly.
 - local static studio pages default to `http://127.0.0.1:8010`
 - deployed pages expect a future reverse proxy path such as `/api`
 - jobs are created through the API and then polled until completion
+- image jobs produce a placeholder PNG in `backend/runtime/artifacts/`
+- video jobs produce a placeholder GIF in `backend/runtime/artifacts/`
 
 ## Next implementation steps
 

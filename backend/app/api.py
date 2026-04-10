@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 
 from .schemas import GenerationAcceptedResponse, ImageGenerationRequest, JobRecord, VideoGenerationRequest
+from .processing import processor
 from .store import store
 
 router = APIRouter(prefix="/v1")
@@ -12,13 +13,17 @@ def list_models():
 
 
 @router.post("/generations/image", response_model=GenerationAcceptedResponse, status_code=202)
-def create_image_generation(payload: ImageGenerationRequest):
-    return store.create_image_generation(payload)
+def create_image_generation(payload: ImageGenerationRequest, background_tasks: BackgroundTasks):
+    accepted = store.create_image_generation(payload)
+    background_tasks.add_task(processor.process_job, accepted.job.id)
+    return accepted
 
 
 @router.post("/generations/video", response_model=GenerationAcceptedResponse, status_code=202)
-def create_video_generation(payload: VideoGenerationRequest):
-    return store.create_video_generation(payload)
+def create_video_generation(payload: VideoGenerationRequest, background_tasks: BackgroundTasks):
+    accepted = store.create_video_generation(payload)
+    background_tasks.add_task(processor.process_job, accepted.job.id)
+    return accepted
 
 
 @router.get("/jobs/{job_id}", response_model=JobRecord)
