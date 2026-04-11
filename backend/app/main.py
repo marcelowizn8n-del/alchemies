@@ -36,6 +36,7 @@ def healthz():
         "cors_allow_origins": allow_origins,
         "image_engine": settings.image_engine,
         "video_engine": settings.video_engine,
+        "image_worker_url": settings.image_worker_url or None,
     }
 
 

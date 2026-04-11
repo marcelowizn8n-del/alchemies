@@ -5,14 +5,34 @@ services:
       dockerfile: Dockerfile
     container_name: alchemies-api
     restart: unless-stopped
+    depends_on:
+      - alchemies-image-worker
     environment:
       ALCHEMIES_ENV: production
       ALCHEMIES_APP_NAME: Alchemies API
       ALCHEMIES_PUBLIC_BASE_URL: https://alchemies.pro/api
       ALCHEMIES_CORS_ALLOW_ORIGINS: https://alchemies.pro,https://www.alchemies.pro
       ALCHEMIES_INLINE_WORKER_ENABLED: "true"
+      ALCHEMIES_IMAGE_WORKER_URL: http://alchemies-image-worker:8011
       ALCHEMIES_IMAGE_ENGINE: placeholder
       ALCHEMIES_VIDEO_ENGINE: placeholder
+      ALCHEMIES_RUNTIME_DIR: /app/runtime
+    volumes:
+      - ./backend/runtime:/app/runtime
+    networks:
+      - default
+
+  alchemies-image-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: alchemies-image-worker
+    restart: unless-stopped
+    command: ["python", "-m", "uvicorn", "app.image_worker_main:app", "--host", "0.0.0.0", "--port", "8011"]
+    environment:
+      ALCHEMIES_ENV: production
+      ALCHEMIES_APP_NAME: Alchemies Image Worker
+      ALCHEMIES_IMAGE_ENGINE: placeholder
       ALCHEMIES_RUNTIME_DIR: /app/runtime
     volumes:
       - ./backend/runtime:/app/runtime

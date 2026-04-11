@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     public_base_url: str = Field(default="http://127.0.0.1:8010")
     cors_allow_origins: str = Field(default="*")
     inline_worker_enabled: bool = True
+    image_worker_url: str = Field(default="")
+    image_worker_timeout_seconds: int = Field(default=120, ge=5, le=1800)
     image_engine: str = "placeholder"
     video_engine: str = "placeholder"
     runtime_dir: str = str(Path(__file__).resolve().parent.parent / "runtime")

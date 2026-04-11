@@ -162,7 +162,7 @@ async function checkApiHealth() {
     setApiBadge("API offline", "offline");
     setJobFeedback(
       "Own API offline",
-      "Start the FastAPI service on port 8000 or configure a reverse proxy at /api before dispatching jobs.",
+      "Start the FastAPI service on port 8010 or configure a reverse proxy at /api before dispatching jobs.",
       "error",
     );
   }
@@ -313,8 +313,8 @@ function updateSuccessModal(generation) {
   if (successMessage) {
     successMessage.textContent =
       generation.kind === "video"
-        ? "Your own API scaffold completed the video job and registered mock artifact records."
-        : "Your own API scaffold completed the image job and registered mock artifact records.";
+        ? "Your own API completed the video job with the current development fallback pipeline."
+        : "Your own API completed the image job and received the artifact from the private image worker.";
   }
 
   if (successPrimaryName) successPrimaryName.textContent = primaryArtifact?.filename || `${generation.id}.bin`;
@@ -383,7 +383,7 @@ async function pollJob(jobId, generationId) {
         setGenerateBusy(false);
         setPreviewCopy(
           "Generation completed",
-          `Your own API finished the ${generation.kind} request and stored artifact metadata for ${generation.id}.`,
+          `Your own API finished the ${generation.kind} request and stored deliverable artifacts for ${generation.id}.`,
         );
       }
 

@@ -61,4 +61,4 @@ Then visit:
 http://127.0.0.1:4173/studio.html
 ```
 
-In development mode, image jobs generate a placeholder PNG and video jobs generate a placeholder GIF through the API so the full end-to-end flow can be tested before a GPU worker is connected.
+For the next architectural step, the repo now includes a private image worker scaffold. The public API can delegate image jobs to that worker while video remains inline for development.

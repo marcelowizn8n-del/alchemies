@@ -131,6 +131,7 @@ The repository now includes:
 
 - `backend/` for the public API foundation
 - generation endpoints for image and video jobs
-- mock job lifecycle for development
+- a private image worker scaffold with an internal HTTP contract
+- development placeholder artifact flow for both image and video
 
-The next step is to connect this API to a real queue and then to a dedicated GPU worker.
+The next step is to replace the placeholder image backend inside the private worker with a real `diffusers` runtime on a dedicated GPU machine.

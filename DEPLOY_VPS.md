@@ -20,9 +20,9 @@ Your server already has:
 So the safe path is:
 
 1. keep `nginx-proxy-manager` as the public reverse proxy
-2. run Alchemies web and API in dedicated containers
+2. run Alchemies web, API, and image worker in dedicated containers
 3. bind only the web container to `127.0.0.1:8090`
-4. keep the API container private inside Docker only
+4. keep the API and image worker private inside Docker only
 5. attach the web container to the same Docker network used by `nginx-proxy-manager`
 6. create a new Proxy Host in NPM for `alchemies.pro`
 
@@ -104,7 +104,9 @@ The production flow is:
 
 - NPM -> `alchemies-web`
 - `alchemies-web` -> `/api/*` proxied internally to `alchemies-api`
-- `alchemies-api` generates development artifacts privately inside the stack
+- `alchemies-api` -> private `alchemies-image-worker` for image jobs
+- `alchemies-api` keeps video placeholder processing inline for now
+- `alchemies-image-worker` writes artifacts privately inside the stack
 
 ## Nginx Proxy Manager
 
@@ -133,4 +135,4 @@ apt install -y docker.io docker-compose-plugin rsync
 - The public deployment bundle is generated in `/Users/marcelo/Documents/alchemies.pro/dist`.
 - If you later add an API, keep it in a separate service and route it independently.
 - The host-Nginx files remain in the repo, but they are not the recommended path for this VPS.
-- The VPS stack now supports a private `alchemies-api` service behind the existing `alchemies-web` container.
+- The VPS stack now supports a private `alchemies-api` service and a private `alchemies-image-worker` behind the existing `alchemies-web` container.

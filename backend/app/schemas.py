@@ -98,3 +98,17 @@ class ModelDescriptor(BaseModel):
     placement: str
     status: str
     notes: str
+
+
+class ImageWorkerRequest(BaseModel):
+    generation_id: str
+    model: str
+    prompt: str
+    request: dict[str, Any]
+
+
+class ImageWorkerResponse(BaseModel):
+    generation_id: str
+    engine: str
+    message: str
+    artifacts: list[ArtifactRecord] = Field(default_factory=list)
