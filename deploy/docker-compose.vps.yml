@@ -1,8 +1,30 @@
 services:
+  alchemies-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: alchemies-api
+    restart: unless-stopped
+    environment:
+      ALCHEMIES_ENV: production
+      ALCHEMIES_APP_NAME: Alchemies API
+      ALCHEMIES_PUBLIC_BASE_URL: https://alchemies.pro/api
+      ALCHEMIES_CORS_ALLOW_ORIGINS: https://alchemies.pro,https://www.alchemies.pro
+      ALCHEMIES_INLINE_WORKER_ENABLED: "true"
+      ALCHEMIES_IMAGE_ENGINE: placeholder
+      ALCHEMIES_VIDEO_ENGINE: placeholder
+      ALCHEMIES_RUNTIME_DIR: /app/runtime
+    volumes:
+      - ./backend/runtime:/app/runtime
+    networks:
+      - default
+
   alchemies-web:
     image: nginx:1.27-alpine
     container_name: alchemies-web
     restart: unless-stopped
+    depends_on:
+      - alchemies-api
     ports:
       - "127.0.0.1:${ALCHEMIES_HOST_PORT:-8090}:80"
     volumes:
